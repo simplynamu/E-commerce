@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const port = 4000;
 const express = require('express');
 const app = express();
@@ -11,7 +12,12 @@ app.use(express.json());
 app.use(cors());
 
 //Database connection with mongodb
-mongoose.connect("mongodb+srv://Namrata18:namu1803@cluster0.kqpnw6n.mongodb.net/e-commerce");
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 //API creation
 app.get('/', (req, res) => {
@@ -165,7 +171,7 @@ app.post('/signup', async(req, res) => {
             id: user.id
         }
     }
-    const token = jwt.sign(data, 'secret_ecom');
+    const token = jwt.sign(data, process.env.JWT_SECRET);
     res.json({ success: true, token })
 })
 
@@ -181,7 +187,7 @@ app.post('/login', async(req, res) => {
                     id: user.id
                 }
             }
-            const token = jwt.sign(data, 'secret_ecom');
+            const token = jwt.sign(data, process.env.JWT_SECRET);
             res.json({ success: true, token });
         } else {
             res.json({
@@ -217,7 +223,7 @@ const fetchUser = async(req, res, next) => {
         res.status(401).send({ errors: "Please authentcate using valid token" })
     } else {
         try {
-            const data = jwt.verify(token, 'secret_ecom');
+            const data = jwt.verify(token, process.env.JWT_SECRET);
             req.user = data.user;
             next();
         } catch (error) {
