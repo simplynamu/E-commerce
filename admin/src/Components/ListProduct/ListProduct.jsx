@@ -41,7 +41,7 @@ await fetchInfo();
         {allproducts.map((product,index)=>{
           return <>
           <div key={index}     className="listproduct-format-main listproduct-format">
-            <img src={`https://e-commerce-0v1w.onrender.com${product.image}`} alt="" /> alt="" className="listproduct-product-icon" />
+            <img src={product.image} alt="" className="listproduct-product-icon" />
             <p>{product.name}</p>
             <p>${product.old_price}</p>
             <p>${product.new_price}</p>
