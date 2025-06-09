@@ -11,10 +11,10 @@ const ProductDisplay = (props) => {
     <div className='productdisplay'>
       <div className="productdisplay-left">
         <div className="productdisplay-img-list">
-            <img src={product.image} alt="" />
-            <img src={product.image} alt="" />
-            <img src={product.image} alt="" />
-            <img src={product.image} alt="" />
+            <img src={`https://e-commerce-0v1w.onrender.com${product.image}`} alt="" />
+            <img src={`https://e-commerce-0v1w.onrender.com${product.image}`} alt="" />
+            <img src={`https://e-commerce-0v1w.onrender.com${product.image}`} alt="" />
+            <img src={`https://e-commerce-0v1w.onrender.com${product.image}`} alt="" />
         </div>
         <div className="productdisplay-img">
             <img className='productdisplay-main-img' src={product.image} alt="" />
