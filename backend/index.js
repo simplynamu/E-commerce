@@ -7,6 +7,24 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
+// Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'products', // Cloudinary folder name
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+  },
+});
 
 app.use(express.json());
 app.use(cors());
@@ -25,23 +43,25 @@ app.get('/', (req, res) => {
 });
 
 //Image Storage Engine
-const storage = multer.diskStorage({
-    destination: './upload/images',
-    filename: (req, file, cb) => {
-        return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
-    }
-})
+// const storage = multer.diskStorage({
+//     destination: './upload/images',
+//     filename: (req, file, cb) => {
+//         return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+//     }
+// })
 
 const upload = multer({ storage: storage });
 
 //Creating upload Endpoint images
-app.use('/images', express.static('upload/images'))
+// app.use('/images', express.static('upload/images'));
 
 app.post('/upload', upload.single(`product`), (req, res) => {
     res.json({
         success: 1,
-        image_url: `http://localhost:${port}/images/${req.file.filename}`
+        // image_url: `http://localhost:${port}/images/${req.file.filename}`
         // image_url: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+        // image_url: `https://e-commerce-0v1w.onrender.com/images/${req.file.filename}`
+          image_url: req.file.path,  // Cloudinary URL
     });
 });
 
